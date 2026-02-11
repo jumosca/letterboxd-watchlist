@@ -48,11 +48,9 @@ export interface FilterState {
   length: 'any' | 'short' | 'medium' | 'long' | 'verylong';
   languages: string[];
   decades: number[];
-  ratingMin: number;
-  ratingMax: number;
   genres: string[];
   onlyStreaming: boolean;
-  sortBy: 'added' | 'title' | 'rating' | 'runtime' | 'year';
+  sortBy: 'added' | 'title' | 'runtime' | 'year';
   sortOrder: 'asc' | 'desc';
 }
 

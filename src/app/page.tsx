@@ -1,19 +1,14 @@
-/**
- * Main Watchlist Page
- *
- * Displays the user's Letterboxd watchlist with filtering and sorting
- */
-
 'use client';
 
 import { useState } from 'react';
 import { useWatchlist } from '@/hooks/useWatchlist';
 import { useFilters } from '@/hooks/useFilters';
-import WatchlistGrid from '@/components/WatchlistGrid';
-import SyncButton from '@/components/SyncButton';
+import FilmList from '@/components/FilmList';
+import FilmDetail from '@/components/FilmDetail';
+import PosterGrid from '@/components/PosterGrid';
 import FilterBar from '@/components/FilterBar';
-import RandomPicker from '@/components/RandomPicker';
 import CsvUpload from '@/components/CsvUpload';
+import SyncButton from '@/components/SyncButton';
 
 export default function Home() {
   const {
@@ -35,83 +30,80 @@ export default function Home() {
     activeFilterCount,
   } = useFilters(films);
 
-  const [showRandomPicker, setShowRandomPicker] = useState(false);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const selectedFilm = filteredFilms.find((f) => f.tmdbId === selectedId) ?? null;
 
   return (
-    <main className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between flex-wrap gap-4">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                My Letterboxd Watchlist
-              </h1>
-              <p className="mt-1 text-sm text-gray-500">
-                {films.length} films total
-                {filteredFilms.length !== films.length &&
-                  ` • ${filteredFilms.length} showing`}
-              </p>
-            </div>
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowRandomPicker(true)}
-                disabled={filteredFilms.length === 0}
-                className={`
-                  px-4 py-2 rounded-lg font-medium transition-colors
-                  ${
-                    filteredFilms.length === 0
-                      ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                      : 'bg-green-600 text-white hover:bg-green-700'
-                  }
-                `}
-              >
-                🎲 Random Pick
-              </button>
-              <CsvUpload
-                onUpload={uploadAndSync}
-                uploading={syncing}
-                error={error}
-              />
-              <SyncButton
-                onSync={syncWatchlist}
-                syncing={syncing}
-                lastSyncTime={getLastSyncTime()}
-                error={error}
-              />
-            </div>
+    <div
+      className="flex flex-col md:flex-row h-screen overflow-hidden bg-white"
+      style={{ fontFamily: 'var(--font-space-grotesk), Arial, sans-serif' }}
+    >
+      {/* ── Left panel (35%) ── */}
+      <div className="w-full md:w-[35%] h-[45vh] md:h-auto border-b md:border-b-0 md:border-r border-black flex flex-col min-h-0 shrink-0">
+        {/* Header */}
+        <header className="border-b border-black p-4 shrink-0">
+          <h1 className="text-base font-bold uppercase tracking-widest mb-1">
+            My Watchlist
+          </h1>
+          <p className="text-xs text-gray-500 uppercase tracking-widest mb-3">
+            {films.length} films
+            {filteredFilms.length !== films.length && ` · ${filteredFilms.length} showing`}
+          </p>
+
+          {/* Controls */}
+          <div className="flex flex-wrap gap-2">
+            <CsvUpload
+              onUpload={uploadAndSync}
+              uploading={syncing}
+              error={error}
+            />
+            <SyncButton
+              onSync={syncWatchlist}
+              syncing={syncing}
+              lastSyncTime={getLastSyncTime()}
+              error={error}
+            />
           </div>
-        </div>
-      </header>
+        </header>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Filter Bar */}
-        {films.length > 0 && (
-          <FilterBar
-            filters={filters}
-            onFilterChange={updateFilter}
-            onReset={resetFilters}
-            filterOptions={filterOptions}
-            activeFilterCount={activeFilterCount}
+        {/* Scrollable film list */}
+        <div className="overflow-y-auto flex-1 min-h-0">
+          <FilmList
+            films={filteredFilms}
+            selectedId={selectedId}
+            onSelect={setSelectedId}
           />
-        )}
-
-        {/* Watchlist Grid */}
-        <WatchlistGrid
-          films={filteredFilms}
-          loading={loading}
-          syncing={syncing}
-        />
+        </div>
       </div>
 
-      {/* Random Picker Modal */}
-      {showRandomPicker && (
-        <RandomPicker
-          films={filteredFilms}
-          onClose={() => setShowRandomPicker(false)}
+      {/* ── Right panel (65%) ── */}
+      <div className="flex-1 flex flex-col min-h-0">
+        {/* Filter bar */}
+        <FilterBar
+          filters={filters}
+          onFilterChange={updateFilter}
+          onReset={resetFilters}
+          filterOptions={filterOptions}
+          activeFilterCount={activeFilterCount}
         />
-      )}
-    </main>
+
+        {/* Content: detail or poster grid */}
+        <div className="overflow-y-auto flex-1 min-h-0">
+          {selectedFilm ? (
+            <FilmDetail
+              film={selectedFilm}
+              onClose={() => setSelectedId(null)}
+            />
+          ) : (
+            <PosterGrid
+              films={filteredFilms}
+              onSelect={setSelectedId}
+              loading={loading}
+              syncing={syncing}
+            />
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
