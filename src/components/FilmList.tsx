@@ -27,34 +27,44 @@ export default function FilmList({ films, selectedId, onSelect }: FilmListProps)
           <li key={film.tmdbId}>
             <button
               onClick={() => onSelect(film.tmdbId)}
-              className={`w-full text-left flex items-baseline gap-3 px-4 py-1.5 border-b border-black/6 transition-colors ${
+              className={`w-full text-left flex flex-col border-b border-black transition-colors ${
                 isSelected
                   ? 'bg-black text-white'
-                  : 'hover:bg-gray-50 text-black'
+                  : 'hover:bg-blue-100 text-black'
               }`}
             >
-              <span
-                className={`font-mono text-xs shrink-0 ${
-                  isSelected ? 'text-gray-400' : 'text-gray-400'
-                }`}
-              >
-                {num}
-              </span>
-              <span className="flex-1 min-w-0 flex items-baseline justify-between gap-2 overflow-hidden">
-                <span className="flex items-baseline gap-2 truncate min-w-0">
-                  <span className="text-sm font-medium leading-tight truncate">
-                    {film.title.toUpperCase()}
-                  </span>
-                  <span className={`text-xs uppercase tracking-widest shrink-0 ${isSelected ? 'text-gray-300' : 'text-gray-500'}`}>
-                    {film.year}
-                  </span>
+              <div className="flex items-baseline gap-3 px-4 py-1.5">
+                <span
+                  className={`font-mono text-xs shrink-0 ${
+                    isSelected ? 'text-gray-400' : 'text-gray-400'
+                  }`}
+                >
+                  {num}
                 </span>
-                {film.runtime && (
-                  <span className={`text-xs uppercase tracking-widest shrink-0 ${isSelected ? 'text-gray-300' : 'text-gray-500'}`}>
-                    {film.runtime}min
+                <span className="flex-1 min-w-0 flex items-baseline justify-between gap-2 overflow-hidden">
+                  <span className="flex items-baseline gap-2 truncate min-w-0">
+                    <span className="text-sm font-medium leading-tight truncate">
+                      {film.title.toUpperCase()}
+                    </span>
+                    <span className={`text-xs uppercase tracking-widest shrink-0 ${isSelected ? 'text-gray-300' : 'text-gray-500'}`}>
+                      {film.year}
+                    </span>
                   </span>
-                )}
-              </span>
+                  {film.runtime && (
+                    <span className={`text-xs uppercase tracking-widest shrink-0 ${isSelected ? 'text-gray-300' : 'text-gray-500'}`}>
+                      {film.runtime}min
+                    </span>
+                  )}
+                </span>
+              </div>
+              {film.runtime && (
+                <div className="flex justify-end">
+                  <div
+                    className={`h-[2px] ${isSelected ? 'bg-blue-200' : 'bg-blue-300'}`}
+                    style={{ width: `${Math.min(Math.pow(film.runtime / 240, 1.5) * 100, 100)}%` }}
+                  />
+                </div>
+              )}
             </button>
           </li>
         );

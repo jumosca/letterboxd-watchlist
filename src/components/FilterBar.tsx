@@ -43,7 +43,7 @@ export default function FilterBar({
   }
 
   const selectClass =
-    'bg-white border border-black text-xs uppercase tracking-widest px-2 py-1.5 focus:outline-none focus:ring-0 appearance-none cursor-pointer';
+    'bg-white border border-black text-xs uppercase tracking-widest px-2 py-1.5 focus:outline-none focus:ring-0 appearance-none cursor-pointer hover:bg-black hover:text-white transition-colors';
 
   return (
     <div className="border-b border-black px-4 py-2 flex flex-wrap items-center gap-3 shrink-0 bg-white">
@@ -116,7 +116,7 @@ export default function FilterBar({
       </select>
 
       {/* Streaming toggle */}
-      <label className="flex items-center gap-1.5 cursor-pointer select-none text-xs uppercase tracking-widest">
+      <label className="flex items-center gap-1.5 cursor-pointer select-none text-xs uppercase tracking-widest hover:bg-black hover:text-white transition-colors border border-black px-2 py-1.5">
         <input
           type="checkbox"
           checked={filters.onlyStreaming}
