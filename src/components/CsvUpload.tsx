@@ -28,7 +28,7 @@ export default function CsvUpload({ onUpload, uploading, error }: CsvUploadProps
       <button
         onClick={() => inputRef.current?.click()}
         disabled={uploading}
-        className="text-xs uppercase tracking-widest border border-black px-3 py-1.5 hover:bg-black hover:text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        className="text-xs uppercase tracking-widest border border-black bg-black text-white px-3 py-1.5 hover:bg-white hover:text-black transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
       >
         {uploading ? 'Uploading…' : 'Upload CSV'}
       </button>

@@ -8,7 +8,6 @@ import FilmDetail from '@/components/FilmDetail';
 import PosterGrid from '@/components/PosterGrid';
 import FilterBar from '@/components/FilterBar';
 import CsvUpload from '@/components/CsvUpload';
-import SyncButton from '@/components/SyncButton';
 
 export default function Home() {
   const {
@@ -16,9 +15,7 @@ export default function Home() {
     loading,
     syncing,
     error,
-    syncWatchlist,
     uploadAndSync,
-    getLastSyncTime,
   } = useWatchlist();
 
   const {
@@ -62,19 +59,11 @@ export default function Home() {
           </p>
 
           {/* Controls */}
-          <div className="flex flex-wrap gap-2">
-            <CsvUpload
-              onUpload={uploadAndSync}
-              uploading={syncing}
-              error={error}
-            />
-            <SyncButton
-              onSync={syncWatchlist}
-              syncing={syncing}
-              lastSyncTime={getLastSyncTime()}
-              error={error}
-            />
-          </div>
+          <CsvUpload
+            onUpload={uploadAndSync}
+            uploading={syncing}
+            error={error}
+          />
         </header>
 
         {/* Scrollable film list */}

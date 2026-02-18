@@ -8,7 +8,7 @@ export const appConfig = {
     username: 'jmosca',
   },
   tmdb: {
-    apiKey: process.env.NEXT_PUBLIC_TMDB_API_KEY || '',
+    apiKey: process.env.TMDB_API_KEY || '',
     baseUrl: 'https://api.themoviedb.org/3',
     imageBaseUrl: 'https://image.tmdb.org/t/p',
     countryCode: 'ES', // Spain

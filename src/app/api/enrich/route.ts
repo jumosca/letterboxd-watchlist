@@ -9,7 +9,29 @@ import { NextRequest, NextResponse } from 'next/server';
 import { searchAndEnrichMovie } from '@/lib/tmdb';
 import { Film, BasicFilm } from '@/lib/types';
 
+// In-memory rate limiter: 3 requests per IP per 60 seconds
+const rateLimit = new Map<string, number[]>();
+const RATE_LIMIT_MAX = 3;
+const RATE_LIMIT_WINDOW = 60_000;
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const timestamps = (rateLimit.get(ip) ?? []).filter(t => now - t < RATE_LIMIT_WINDOW);
+  if (timestamps.length >= RATE_LIMIT_MAX) return true;
+  timestamps.push(now);
+  rateLimit.set(ip, timestamps);
+  return false;
+}
+
 export async function POST(request: NextRequest) {
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
+  if (isRateLimited(ip)) {
+    return NextResponse.json(
+      { error: 'Too many requests. Try again in a minute.' },
+      { status: 429 }
+    );
+  }
+
   try {
     const body = await request.json();
     const { films } = body as { films: BasicFilm[] };
@@ -22,9 +44,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Server-side validation and sanitization
-    if (films.length > 5000) {
+    if (films.length > 500) {
       return NextResponse.json(
-        { error: 'Too many films: max 5000 per request' },
+        { error: 'Too many films: max 500 per request' },
         { status: 400 }
       );
     }
@@ -129,10 +151,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error in enrich API route:', error);
     return NextResponse.json(
-      {
-        error: 'Failed to enrich films',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      },
+      { error: 'Failed to enrich films' },
       { status: 500 }
     );
   }

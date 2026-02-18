@@ -8,44 +8,6 @@ import { BasicFilm, Film } from './types';
 import { parseCsvToFilms } from './csv';
 
 /**
- * Fetch and enrich films from Letterboxd watchlist
- * This calls our API route which handles the RSS fetch and TMDB enrichment
- */
-export async function fetchAndEnrichWatchlist(
-  username: string
-): Promise<Film[]> {
-  try {
-    // Fetch watchlist from our API route (reads from CSV)
-    const watchlistResponse = await fetch('/api/watchlist');
-
-    if (!watchlistResponse.ok) {
-      throw new Error(`Failed to fetch watchlist: ${watchlistResponse.statusText}`);
-    }
-
-    const { films: basicFilms } = await watchlistResponse.json();
-
-    // Enrich with TMDB data via our API route
-    const enrichResponse = await fetch('/api/enrich', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ films: basicFilms }),
-    });
-
-    if (!enrichResponse.ok) {
-      throw new Error('Failed to enrich films with TMDB data');
-    }
-
-    const enrichData = await enrichResponse.json();
-    return enrichData.films;
-  } catch (error) {
-    console.error('Error fetching and enriching watchlist:', error);
-    throw error;
-  }
-}
-
-/**
  * Upload a Letterboxd CSV file and sync with the cached film list.
  * Only new films (not already in cache) are sent to /api/enrich.
  * Films removed from the CSV are dropped from the result.

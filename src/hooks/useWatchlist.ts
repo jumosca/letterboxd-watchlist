@@ -14,8 +14,7 @@ import {
   isCacheValid,
   getLastSyncString,
 } from '@/lib/storage';
-import { fetchAndEnrichWatchlist, uploadAndSync as apiUploadAndSync } from '@/lib/api';
-import { appConfig } from '@/config/app.config';
+import { uploadAndSync as apiUploadAndSync } from '@/lib/api';
 
 export function useWatchlist() {
   const [films, setFilms] = useState<Film[]>([]);
@@ -23,10 +22,6 @@ export function useWatchlist() {
   const [syncing, setSyncing] = useState(false);
   const [lastSync, setLastSync] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [syncProgress, setSyncProgress] = useState<{
-    current: number;
-    total: number;
-  } | null>(null);
 
   // Load from cache on mount
   useEffect(() => {
@@ -36,40 +31,6 @@ export function useWatchlist() {
       setLastSync(cached.timestamp);
     }
     setLoading(false);
-  }, []);
-
-  /**
-   * Sync watchlist from Letterboxd and enrich with TMDB data
-   */
-  const syncWatchlist = useCallback(async () => {
-    setSyncing(true);
-    setError(null);
-    setSyncProgress({ current: 0, total: 0 });
-
-    try {
-      // Fetch and enrich films
-      const enrichedFilms = await fetchAndEnrichWatchlist(
-        appConfig.letterboxd.username
-      );
-
-      // Store in cache
-      const timestamp = Date.now();
-      storeWatchlist(enrichedFilms, timestamp);
-
-      setFilms(enrichedFilms);
-      setLastSync(timestamp);
-      setSyncProgress(null);
-
-      return enrichedFilms;
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'Failed to sync watchlist';
-      setError(errorMessage);
-      setSyncProgress(null);
-      throw err;
-    } finally {
-      setSyncing(false);
-    }
   }, []);
 
   /**
@@ -123,8 +84,6 @@ export function useWatchlist() {
     syncing,
     lastSync,
     error,
-    syncProgress,
-    syncWatchlist,
     uploadAndSync,
     isCacheStale,
     getLastSyncTime,
