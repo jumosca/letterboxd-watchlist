@@ -41,8 +41,8 @@ export default function Home() {
       className="flex flex-col md:flex-row h-screen overflow-hidden bg-white"
       style={{ fontFamily: 'var(--font-space-grotesk), Arial, sans-serif' }}
     >
-      {/* ── Left panel (35%) ── */}
-      <div className="w-full md:w-[35%] h-[45vh] md:h-auto border-b md:border-b-0 md:border-r border-black flex flex-col min-h-0 shrink-0">
+      {/* ── Left panel (35%) — hidden on mobile ── */}
+      <div className="hidden md:flex md:w-[35%] md:h-auto border-r border-black flex-col min-h-0 shrink-0">
         {/* Header */}
         <header className="border-b border-black p-4 shrink-0">
           <img
@@ -76,8 +76,23 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ── Right panel (65%) ── */}
+      {/* ── Right panel (65% on desktop, full on mobile) ── */}
       <div className="flex-1 flex flex-col min-h-0">
+        {/* Mobile header */}
+        <header className="md:hidden border-b border-black p-4 shrink-0">
+          <div className="flex items-center justify-between gap-3">
+            <img
+              src="/watchlist.gif"
+              alt=""
+              className="h-12 object-contain"
+            />
+            <CsvUpload
+              onUpload={uploadAndSync}
+              uploading={syncing}
+              error={error}
+            />
+          </div>
+        </header>
         {/* Filter bar */}
         <FilterBar
           filters={filters}
