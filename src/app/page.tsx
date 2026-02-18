@@ -33,6 +33,12 @@ export default function Home() {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const selectedFilm = filteredFilms.find((f) => f.tmdbId === selectedId) ?? null;
 
+  function handleRandomPick() {
+    if (filteredFilms.length === 0) return;
+    const random = filteredFilms[Math.floor(Math.random() * filteredFilms.length)];
+    setSelectedId(random.tmdbId);
+  }
+
   return (
     <div
       className="flex flex-col md:flex-row h-screen overflow-hidden bg-white"
@@ -42,8 +48,13 @@ export default function Home() {
       <div className="w-full md:w-[35%] h-[45vh] md:h-auto border-b md:border-b-0 md:border-r border-black flex flex-col min-h-0 shrink-0">
         {/* Header */}
         <header className="border-b border-black p-4 shrink-0">
+          <img
+            src="/watchlist.gif"
+            alt=""
+            className="w-full object-contain mb-3"
+          />
           <h1 className="text-base font-bold uppercase tracking-widest mb-1">
-            My Watchlist
+            What Am I Watching Tonight
           </h1>
           <p className="text-xs text-gray-500 uppercase tracking-widest mb-3">
             {films.length} films
@@ -83,8 +94,10 @@ export default function Home() {
           filters={filters}
           onFilterChange={updateFilter}
           onReset={resetFilters}
+          onRandomPick={handleRandomPick}
           filterOptions={filterOptions}
           activeFilterCount={activeFilterCount}
+          filmCount={filteredFilms.length}
         />
 
         {/* Content: detail or poster grid */}

@@ -6,12 +6,14 @@ interface FilterBarProps {
   filters: FilterState;
   onFilterChange: <K extends keyof FilterState>(key: K, value: FilterState[K]) => void;
   onReset: () => void;
+  onRandomPick: () => void;
   filterOptions: {
     languages: string[];
     decades: number[];
     genres: string[];
   };
   activeFilterCount: number;
+  filmCount: number;
 }
 
 // Combined sort options (sortBy + sortOrder encoded as a single value)
@@ -30,8 +32,10 @@ export default function FilterBar({
   filters,
   onFilterChange,
   onReset,
+  onRandomPick,
   filterOptions,
   activeFilterCount,
+  filmCount,
 }: FilterBarProps) {
   const currentSortKey = `${filters.sortBy}-${filters.sortOrder}`;
 
@@ -115,8 +119,17 @@ export default function FilterBar({
         ))}
       </select>
 
+      {/* Random pick */}
+      <button
+        onClick={onRandomPick}
+        disabled={filmCount === 0}
+        className="border-2 border-black bg-orange-300 text-black text-xs uppercase tracking-widest px-3 py-1.5 hover:bg-orange-400 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+      >
+        Random Pick
+      </button>
+
       {/* Streaming toggle */}
-      <label className="flex items-center gap-1.5 cursor-pointer select-none text-xs uppercase tracking-widest hover:bg-black hover:text-white transition-colors border border-black px-2 py-1.5">
+      <label className="flex items-center gap-1.5 cursor-pointer select-none text-xs uppercase tracking-widest">
         <input
           type="checkbox"
           checked={filters.onlyStreaming}
