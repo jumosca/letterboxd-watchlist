@@ -1,8 +1,16 @@
+import crypto from 'node:crypto';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const config = {
   matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
 };
+
+function timingSafeEqualString(a: string, b: string) {
+  const aBuf = Buffer.from(a, 'utf8');
+  const bBuf = Buffer.from(b, 'utf8');
+  if (aBuf.length !== bBuf.length) return false;
+  return crypto.timingSafeEqual(aBuf, bBuf);
+}
 
 export function proxy(request: NextRequest) {
   const user = process.env.BASIC_AUTH_USER;
@@ -13,12 +21,21 @@ export function proxy(request: NextRequest) {
 
   const authHeader = request.headers.get('authorization');
   if (authHeader?.startsWith('Basic ')) {
-    const decoded = atob(authHeader.slice(6));
-    const colon = decoded.indexOf(':');
-    const u = decoded.slice(0, colon);
-    const p = decoded.slice(colon + 1);
-    if (u === user && p === password) {
-      return NextResponse.next();
+    try {
+      const decoded = atob(authHeader.slice(6));
+      const colon = decoded.indexOf(':');
+      if (colon !== -1) {
+        const u = decoded.slice(0, colon);
+        const p = decoded.slice(colon + 1);
+        if (
+          timingSafeEqualString(u, user) &&
+          timingSafeEqualString(p, password)
+        ) {
+          return NextResponse.next();
+        }
+      }
+    } catch {
+      // Invalid Base64, fall through to 401
     }
   }
 
