@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|manifest.json|sw.js|icon-192.png|icon-512.png|apple-touch-icon.png|mobile_image.png).*)'],
 };
 
 function timingSafeEqualString(a: string, b: string): boolean {
