@@ -84,7 +84,7 @@ export default function Home() {
             <img
               src="/watchlist_mobile_view.png"
               alt=""
-              className="h-12 object-contain"
+              className="h-12 max-w-[55%] object-contain"
             />
             <CsvUpload
               onUpload={uploadAndSync}
