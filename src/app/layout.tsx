@@ -8,8 +8,14 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: 'Letterboxd Watchlist Manager',
-  description: 'Manage and explore your Letterboxd watchlist with advanced filtering and streaming availability',
+  title: 'What Am I Watching Tonight',
+  description: 'Explore your Letterboxd watchlist with filtering and streaming availability',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Watchlist',
+  },
 };
 
 export default function RootLayout({
@@ -19,6 +25,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <meta name="theme-color" content="#ffffff" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js'); }`,
+          }}
+        />
+      </head>
       <body className={`${spaceGrotesk.variable} antialiased`}>{children}</body>
     </html>
   );

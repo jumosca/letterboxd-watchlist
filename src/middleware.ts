@@ -1,15 +1,17 @@
-import crypto from 'node:crypto';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const config = {
   matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
 };
 
-function timingSafeEqualString(a: string, b: string) {
-  const aBuf = Buffer.from(a, 'utf8');
-  const bBuf = Buffer.from(b, 'utf8');
+function timingSafeEqualString(a: string, b: string): boolean {
+  const encoder = new TextEncoder();
+  const aBuf = encoder.encode(a);
+  const bBuf = encoder.encode(b);
   if (aBuf.length !== bBuf.length) return false;
-  return crypto.timingSafeEqual(aBuf, bBuf);
+  let result = 0;
+  for (let i = 0; i < aBuf.length; i++) result |= aBuf[i] ^ bBuf[i];
+  return result === 0;
 }
 
 export function middleware(request: NextRequest) {
