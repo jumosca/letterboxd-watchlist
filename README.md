@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# My Watchlist
 
-## Getting Started
+Personal web app to browse and filter my Letterboxd watchlist. Upload a CSV export from Letterboxd, filter by runtime, genre, decade, language, and streaming availability, and pick a random film to watch.
 
-First, run the development server:
+Installed as a PWA on Android.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Local development
+
+1. Clone the repo
+2. Create a `.env.local` file:
+
+```
+TMDB_API_KEY=your_key_here
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Get a TMDB API key at [themoviedb.org/settings/api](https://www.themoviedb.org/settings/api).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Install dependencies and run:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm install
+npm run dev
+```
 
-## Learn More
+App runs at [http://localhost:3000](http://localhost:3000). Basic auth is skipped locally if `BASIC_AUTH_USER` and `BASIC_AUTH_PASSWORD` are not set in `.env.local`.
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Hosted on Vercel. Pushes to `main` should auto-deploy; if not, trigger a manual redeploy from the Vercel dashboard.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Required environment variables in Vercel
 
-## Deploy on Vercel
+| Variable | Description |
+|---|---|
+| `TMDB_API_KEY` | TMDB API key |
+| `BASIC_AUTH_USER` | Username for basic auth |
+| `BASIC_AUTH_PASSWORD` | Password for basic auth |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Next.js 16, React 19, TypeScript, Tailwind CSS v4
+- TMDB API for film metadata and streaming availability
