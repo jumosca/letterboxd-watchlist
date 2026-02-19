@@ -1,3 +1,5 @@
+![My Watchlist](my_watchlist_image.jpg)
+
 # My Watchlist
 
 Personal web app to browse and filter my Letterboxd watchlist. Upload a CSV export from Letterboxd, filter by runtime, genre, decade, language, and streaming availability, and pick a random film to watch.
