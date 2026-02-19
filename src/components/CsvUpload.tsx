@@ -21,7 +21,7 @@ export default function CsvUpload({ onUpload, uploading, error }: CsvUploadProps
       <input
         ref={inputRef}
         type="file"
-        accept=".csv"
+        accept=".csv,text/csv,text/plain,application/csv"
         className="hidden"
         onChange={(e) => handleFile(e.target.files?.[0])}
       />
