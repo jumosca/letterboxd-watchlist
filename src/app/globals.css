@@ -16,3 +16,10 @@ body {
   color: var(--foreground);
   font-family: var(--font-space-grotesk), Arial, Helvetica, sans-serif;
 }
+
+.btn-random {
+  background-color: #A5DD0D;
+}
+.btn-random:hover {
+  background-color: #E600FF;
+}

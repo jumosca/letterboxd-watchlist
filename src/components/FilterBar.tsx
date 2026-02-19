@@ -123,7 +123,7 @@ export default function FilterBar({
       <button
         onClick={onRandomPick}
         disabled={filmCount === 0}
-        className="border-2 border-black bg-orange-300 text-black text-xs uppercase tracking-widest px-3 py-1.5 hover:bg-orange-400 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        className="btn-random border-2 border-black text-black text-xs uppercase tracking-widest px-3 py-1.5 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
       >
         Random Pick
       </button>

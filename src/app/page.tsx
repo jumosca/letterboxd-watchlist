@@ -82,7 +82,7 @@ export default function Home() {
         <header className="md:hidden border-b border-black p-4 shrink-0">
           <div className="flex items-center justify-between gap-3">
             <img
-              src="/watchlist.gif"
+              src="/watchlist_mobile_view.png"
               alt=""
               className="h-12 object-contain"
             />
