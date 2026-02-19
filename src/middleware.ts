@@ -12,7 +12,7 @@ function timingSafeEqualString(a: string, b: string) {
   return crypto.timingSafeEqual(aBuf, bBuf);
 }
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const user = process.env.BASIC_AUTH_USER;
   const password = process.env.BASIC_AUTH_PASSWORD;
 
