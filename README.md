@@ -6,6 +6,12 @@ Personal web app to browse and filter my Letterboxd watchlist. Upload a CSV expo
 
 Installed as a PWA on Android.
 
+## Desktop view
+![Desktop View](letterboxd_watchlist_desktop_view.png)
+
+## Mobile view
+![Mobile View](letterboxd_watchlist_mobile_view.jpeg)
+
 ## Local development
 
 1. Clone the repo
