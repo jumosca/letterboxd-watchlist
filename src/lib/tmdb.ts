@@ -119,7 +119,9 @@ export function getPosterUrl(
   path: string | null,
   size: 'w185' | 'w342' | 'w500' | 'original' = 'w342'
 ): string {
-  if (!path) return '/placeholder-poster.png';
+  if (!path) return 'data:image/svg+xml,' + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300" fill="none"><rect width="200" height="300" fill="#f3f4f6"/><text x="100" y="150" text-anchor="middle" fill="#9ca3af" font-size="14" font-family="sans-serif">No poster</text></svg>'
+  );
   return `${appConfig.tmdb.imageBaseUrl}/${size}${path}`;
 }
 

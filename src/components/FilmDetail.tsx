@@ -1,8 +1,13 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Film } from '@/lib/types';
 import { getPosterUrl } from '@/lib/tmdb';
 import StreamingBadges from './StreamingBadges';
+
+const PLACEHOLDER_SRC = 'data:image/svg+xml,' + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300" fill="none"><rect width="200" height="300" fill="#f3f4f6"/><text x="100" y="150" text-anchor="middle" fill="#9ca3af" font-size="14" font-family="sans-serif">No poster</text></svg>'
+);
 
 interface FilmDetailProps {
   film: Film;
@@ -10,7 +15,11 @@ interface FilmDetailProps {
 }
 
 export default function FilmDetail({ film, onClose }: FilmDetailProps) {
-  const posterUrl = getPosterUrl(film.posterPath, 'w342');
+  const [posterSrc, setPosterSrc] = useState(() => getPosterUrl(film.posterPath, 'w342'));
+
+  useEffect(() => {
+    setPosterSrc(getPosterUrl(film.posterPath, 'w342'));
+  }, [film.posterPath]);
 
   return (
     <div className="p-6 h-full">
@@ -28,12 +37,10 @@ export default function FilmDetail({ film, onClose }: FilmDetailProps) {
         {/* Poster */}
         <div className="shrink-0 w-[40%] max-w-[260px]">
           <img
-            src={posterUrl}
+            src={posterSrc}
             alt={`${film.title} poster`}
             className="w-full object-cover"
-            onError={(e) => {
-              e.currentTarget.src = '/placeholder-poster.png';
-            }}
+            onError={() => setPosterSrc(PLACEHOLDER_SRC)}
           />
         </div>
 
