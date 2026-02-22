@@ -10,7 +10,7 @@ Installed as a PWA on Android.
 ![Desktop View](letterboxd_watchlist_desktop_view.png)
 
 ## Mobile view
-![Mobile View](letterboxd_watchlist_mobile_view.jpeg)
+<img src="letterboxd_watchlist_mobile_view.jpeg" width=30% height=30%>
 
 ## Local development
 
