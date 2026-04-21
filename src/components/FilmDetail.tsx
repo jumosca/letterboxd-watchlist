@@ -12,9 +12,10 @@ const PLACEHOLDER_SRC = 'data:image/svg+xml,' + encodeURIComponent(
 interface FilmDetailProps {
   film: Film;
   onClose: () => void;
+  onMarkWatched: (id: number) => void;
 }
 
-export default function FilmDetail({ film, onClose }: FilmDetailProps) {
+export default function FilmDetail({ film, onClose, onMarkWatched }: FilmDetailProps) {
   const [posterSrc, setPosterSrc] = useState(() => getPosterUrl(film.posterPath, 'w342'));
 
   useEffect(() => {
@@ -24,7 +25,13 @@ export default function FilmDetail({ film, onClose }: FilmDetailProps) {
   return (
     <div className="p-6 h-full">
       {/* Close button */}
-      <div className="flex justify-end mb-4">
+      <div className="flex justify-between mb-4">
+        <button
+          onClick={() => onMarkWatched(film.tmdbId)}
+          className="text-xs uppercase tracking-widest bg-[#CC33FF]/40 text-black px-3 py-1.5 rounded-full hover:bg-[#CC33FF]/70 transition-colors"
+        >
+          Mark as Seen
+        </button>
         <button
           onClick={onClose}
           className="text-xs uppercase tracking-widest border border-black px-3 py-1.5 hover:bg-black hover:text-white transition-colors"

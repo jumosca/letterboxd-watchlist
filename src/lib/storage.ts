@@ -8,6 +8,7 @@ import { Film, WatchlistCache } from './types';
 import { appConfig } from '@/config/app.config';
 
 const STORAGE_KEY = 'letterboxd_watchlist';
+const WATCHED_KEY = 'letterboxd_watched';
 
 /**
  * Check if we're in the browser (not SSR)
@@ -129,6 +130,28 @@ export function getLastSyncString(): string | null {
     return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
   }
   return 'just now';
+}
+
+export function getWatchedIds(): number[] {
+  if (!isBrowser) return [];
+  try {
+    const stored = localStorage.getItem(WATCHED_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function addWatchedId(tmdbId: number): void {
+  if (!isBrowser) return;
+  try {
+    const ids = getWatchedIds();
+    if (!ids.includes(tmdbId)) {
+      localStorage.setItem(WATCHED_KEY, JSON.stringify([...ids, tmdbId]));
+    }
+  } catch (error) {
+    console.error('Failed to save watched id:', error);
+  }
 }
 
 /**

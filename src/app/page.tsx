@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useWatchlist } from '@/hooks/useWatchlist';
 import { useFilters } from '@/hooks/useFilters';
+import { useWatched } from '@/hooks/useWatched';
 import FilmList from '@/components/FilmList';
 import FilmDetail from '@/components/FilmDetail';
 import PosterGrid from '@/components/PosterGrid';
@@ -18,6 +19,10 @@ export default function Home() {
     uploadAndSync,
   } = useWatchlist();
 
+  const { watchedIds, markWatched } = useWatched();
+
+  const unwatchedFilms = films.filter((f) => !watchedIds.has(f.tmdbId));
+
   const {
     filters,
     updateFilter,
@@ -25,7 +30,7 @@ export default function Home() {
     filterOptions,
     filteredFilms,
     activeFilterCount,
-  } = useFilters(films);
+  } = useFilters(unwatchedFilms);
 
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const selectedFilm = filteredFilms.find((f) => f.tmdbId === selectedId) ?? null;
@@ -110,6 +115,7 @@ export default function Home() {
             <FilmDetail
               film={selectedFilm}
               onClose={() => setSelectedId(null)}
+              onMarkWatched={(id) => { markWatched(id); setSelectedId(null); }}
             />
           ) : (
             <PosterGrid
